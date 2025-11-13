@@ -1,40 +1,33 @@
-import logo from './logo.svg';
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import HomePage from './pages/HomePage';
+import AnalysisPage from './pages/AnalysisPage';
 import './App.css';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+
+import { Container, Typography, CssBaseline } from '@mui/material';
 
 function App() {
-  const [articles, setArticles] = useState([]);
-  const [search, setSearch] = useState("");
-
-  const handleSearch = async () => {
-    if (!search) {
-      return;
-    }
-
-    setArticles([])
-
-    try{
-      const response = await axios.get(`/api/search?q=${search}`);
-      setArticles(response.data);
-      } catch (err){
-        console.error("fetching data error", err)
-      }
-  }
-
   return (
-    <div className="App">
-      <h1>News Sentiment</h1>
-      <div>
-        <input type="text" placeholder="Enter a topic" value={search} onChange={(e)=>setSearch(e.target.value)}/>
-        <button onClick={handleSearch}>Search</button>
-        {articles.map(article => (
-          <div key={article.url}>
-            <p>{article.title} {article.sentiment.score}</p>
-          </div>
-        ))}
-      </div>
-    </div>
+    <BrowserRouter>
+      <CssBaseline />
+      
+      <Container maxWidth="md" style={{ marginTop: '2rem' }}>
+        
+        <Typography 
+          variant="h3" 
+          component="h1" 
+          gutterBottom 
+          style={{ textAlign: 'center' }}
+        >
+          News Sentiment Dashboard
+        </Typography>
+
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/analysis/:topic" element={<AnalysisPage />} />
+        </Routes>
+      </Container>
+    </BrowserRouter>
   );
 }
 
